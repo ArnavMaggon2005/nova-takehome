@@ -1,0 +1,12 @@
+name: same screening charge re-billed three months later under another label
+mailbox: evals/mailboxes/a_duplicate_alias
+as_of: '2041-10-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01022
+    class: duplicate
+  verdict: finding
+  amount_usd: '25.20'
+  action: draft:dispute
+why: Appendix 4 maps 'Security fee' to SCR; same waybill, code and weight as on VF-41-00901

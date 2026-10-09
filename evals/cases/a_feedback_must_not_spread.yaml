@@ -1,0 +1,15 @@
+name: the same advice's other route is not covered by the feedback
+mailbox: evals/mailboxes/a_feedback_scope
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01002
+    class: overcharge
+  verdict: finding
+  amount_usd: '75.56'
+  action: draft:dispute
+why: feedback names BOS-LAX only; SEA-ATL stays on the rate card (advice sender has
+  no pricing authority)
+feedback:
+  batch_01: evals/feedback/a_feedback_scope.json

@@ -1,0 +1,12 @@
+name: scanned INR bill (no text layer) with a slab overcharge
+mailbox: evals/mailboxes/b_inr
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: KCI/INV/41/0377
+    class: overcharge
+  verdict: finding
+  amount_usd: '32.55'
+  action: draft:dispute
+why: 95 kg billed 455.00 vs 0-99.9 slab 430.00; read by OCR/vision

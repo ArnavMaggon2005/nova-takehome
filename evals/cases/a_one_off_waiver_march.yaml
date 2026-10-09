@@ -1,0 +1,15 @@
+name: one-off approval of a March waiver applies to the March statement
+mailbox: evals/mailboxes/a_one_off_waiver
+as_of: '2041-05-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-ST-4103
+    class: waived_but_billed
+  verdict: finding
+  amount_usd: '275.00'
+  action: draft:dispute
+  learned_at: true
+why: feedback one_off_approval names this key and month
+feedback:
+  batch_01: evals/feedback/a_one_off_waiver.json

@@ -1,0 +1,13 @@
+name: an open invoice due exactly 14 days after as_of
+mailbox: evals/mailboxes/a_late_fee_risk
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01010
+    class: late_fee_risk
+  verdict: finding
+  amount_usd: '31.00'
+  deadline: '2041-10-14'
+  action: internal:payment_reminder
+why: 0 < due - as_of <= 14; one month at 1.25% of the open balance

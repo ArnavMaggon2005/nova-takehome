@@ -218,12 +218,23 @@ def parse_table(spec: dict, pages: list[str]) -> list[dict]:
     events = {str(x["printed"]).strip().upper(): x["meaning"] for x in spec.get("event_values") or []}
     header = int(spec.get("header_line") or 1)
     out = []
+    # numeric dates: infer day/month order per column from the values (a part above 12 settles it)
+    order = {}
+    for name in ("invoice_date", "due_date", "paid_date", "event_date"):
+        j = cols.get(name)
+        if j is None:
+            continue
+        vals = [ln.split(" | ")[j] for ln in lines[header:] if len(ln.split(" | ")) > j]
+        order[name] = _numeric_order(vals)
     for i in range(header, len(lines)):           # 0-based index i == 1-based line i+1, so this starts after header
         cells = [c.strip() for c in lines[i].split(" | ")]
 
         def cell(name):
             j = cols.get(name)
             return cells[j] if j is not None and 0 <= j < len(cells) else None
+
+        def _date(s, name=None):
+            return parse_loose_date(s, order.get(name, "day_first"))
         row = {"ref": {"page": sheet, "line": i + 1}, "cells": cells}
         if spec.get("table_kind") == "ap_register":
             inv = cell("invoice_id")
@@ -232,16 +243,17 @@ def parse_table(spec: dict, pages: list[str]) -> list[dict]:
             amt = cell("amount") or ""
             code = re.search(r"\b([A-Z]{3})\b", f"{cell('currency') or ''} {amt}")   # currency may share the cell
             cur = code.group(1) if code else None
-            row.update(invoice_id=inv, invoice_date=_date(cell("invoice_date")), due_date=_date(cell("due_date")),
+            row.update(invoice_id=inv, invoice_date=_date(cell("invoice_date"), "invoice_date"),
+                       due_date=_date(cell("due_date"), "due_date"),
                        amount=str(dec(amt)) if dec(amt) is not None else None, currency=cur,
                        status=statuses.get((cell("status") or "").strip().lower(), (cell("status") or "").lower()),
-                       paid_date=_date(cell("paid_date")))
+                       paid_date=_date(cell("paid_date"), "paid_date"))
         elif spec.get("table_kind") == "tracking_export":
             awb = cell("awb")
             if not awb:
                 continue
             ev = (cell("event") or "").strip()
-            row.update(awb=awb, event=events.get(ev.upper(), ev.upper()), date=_date(cell("event_date")),
+            row.update(awb=awb, event=events.get(ev.upper(), ev.upper()), date=_date(cell("event_date"), "event_date"),
                        station=cell("station"), reason=cell("reason"))
         else:
             continue
@@ -249,13 +261,44 @@ def parse_table(spec: dict, pages: list[str]) -> list[dict]:
     return out
 
 
-def _date(s):
+_MONTHS = {m: i for i, m in enumerate(("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov",
+                                        "dec"), 1)}
+
+
+def _numeric_order(values) -> str:
+    """'day_first' or 'month_first' for a column of numeric dates like 03/04/2041 (default day_first)."""
+    for v in values:
+        m = re.search(r"\b(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{4})\b", v or "")
+        if m:
+            a, b = int(m.group(1)), int(m.group(2))
+            if a > 12 >= b:
+                return "day_first"
+            if b > 12 >= a:
+                return "month_first"
+    return "day_first"
+
+
+def parse_loose_date(s, order: str = "day_first"):
+    """ISO; 2041/03/12; 12/03/2041, 12.03.2041, 12-03-2041 (by column order); 12 Mar 2041; 12-Mar-2041;
+    Mar 12, 2041. -> 'YYYY-MM-DD' or None."""
     if not s:
         return None
+    s = str(s)
     m = _ISO.search(s)
     if m:
         return m.group(0)
-    m = re.search(r"(\d{1,2})[/.](\d{1,2})[/.](\d{4})", s)
-    if m:                                          # spreadsheets in these mailboxes are ISO; day-first otherwise
-        return f"{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}"
+    m = re.search(r"\b(\d{4})[/.](\d{1,2})[/.](\d{1,2})\b", s)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    m = re.search(r"\b(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{4})\b", s)
+    if m:
+        a, b, y = int(m.group(1)), int(m.group(2)), m.group(3)
+        d, mo = (a, b) if order == "day_first" else (b, a)
+        return f"{y}-{mo:02d}-{d:02d}" if 1 <= mo <= 12 and 1 <= d <= 31 else None
+    m = re.search(r"\b(\d{1,2})[\s\-]([A-Za-z]{3})[A-Za-z]*[\s\-,]+(\d{4})\b", s)
+    if m and m.group(2).lower() in _MONTHS:
+        return f"{m.group(3)}-{_MONTHS[m.group(2).lower()]:02d}-{int(m.group(1)):02d}"
+    m = re.search(r"\b([A-Za-z]{3})[A-Za-z]*\.?\s+(\d{1,2}),?\s+(\d{4})\b", s)
+    if m and m.group(1).lower() in _MONTHS:
+        return f"{m.group(3)}-{_MONTHS[m.group(1).lower()]:02d}-{int(m.group(2)):02d}"
     return None

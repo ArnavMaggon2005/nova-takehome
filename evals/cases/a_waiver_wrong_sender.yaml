@@ -1,0 +1,10 @@
+name: waiver from the pricing contact, who has no waiver authority
+mailbox: evals/mailboxes/a_waivers
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-00931
+    class: waived_but_billed
+  verdict: no_finding
+why: Schedule 1 gives waivers to the credit control manager only

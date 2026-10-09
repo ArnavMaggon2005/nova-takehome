@@ -1,0 +1,15 @@
+name: 'accepted rate advice: a later invoice above it is measured against it'
+mailbox: evals/mailboxes/a_feedback_scope
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01001
+    class: overcharge
+  verdict: finding
+  amount_usd: '72.54'
+  action: draft:dispute
+  learned_at: true
+why: BOS-LAX 300 kg billed 5.80 vs accepted 5.60
+feedback:
+  batch_01: evals/feedback/a_feedback_scope.json

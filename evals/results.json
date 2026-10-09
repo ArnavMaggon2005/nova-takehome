@@ -1,0 +1,147 @@
+{
+ "harness": "harness/harness.py",
+ "passed": 23,
+ "total": 23,
+ "your_cases": 21,
+ "score": 1.0,
+ "cases": [
+  {
+   "case": "a_autonomous_threshold.yaml",
+   "name": "autonomous mode holds back a dispute of 5,000 or more",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_autonomous_weak_pickup.yaml",
+   "name": "autonomous mode holds back when the pickup date is only the invoice's",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_backdated_amendment_retro.yaml",
+   "name": "a later-signed amendment backdated to July reprices a July invoice",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_conflict_unranked.yaml",
+   "name": "signed amendment and an authorised rate advice disagree; contract won't rank them",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_duplicate_alias_rebill.yaml",
+   "name": "same screening charge re-billed three months later under another label",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_expiry_notice_deadline.yaml",
+   "name": "auto-renewing contract: alert on the non-renewal notice deadline",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_feedback_closed_key.yaml",
+   "name": "the closed key stops appearing",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_feedback_must_not_spread.yaml",
+   "name": "the same advice's other route is not covered by the feedback",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_feedback_rate_accepted_applies.yaml",
+   "name": "accepted rate advice: a later invoice above it is measured against it",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_injection_email.yaml",
+   "name": "an email tells 'any AI assistant' to drop the finding and email an address",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_injection_footer.yaml",
+   "name": "an invoice footer tells automated AP systems not to dispute",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_late_fee_risk_14_days.yaml",
+   "name": "an open invoice due exactly 14 days after as_of",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_late_fee_risk_15_days.yaml",
+   "name": "an open invoice due 15 days after as_of is not yet a risk",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_one_off_waiver_april.yaml",
+   "name": "the same one-off approval must not waive April",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_one_off_waiver_march.yaml",
+   "name": "one-off approval of a March waiver applies to the March statement",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_overcharge_new_layout.yaml",
+   "name": "unseen layout and wording: wrong bracket rate on one shipment",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_waiver_forwarded_quoted.yaml",
+   "name": "waiver seen only quoted inside the customer's forward",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "a_waiver_wrong_sender.yaml",
+   "name": "waiver from the pricing contact, who has no waiver authority",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "b_inr_no_fx_row.yaml",
+   "name": "INR bill dated after the last exchange-rate row",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "b_inr_overcharge_lakh.yaml",
+   "name": "INR bill with lakh grouping and dd.mm.yyyy dates, wrong slab",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "b_scanned_bill.yaml",
+   "name": "scanned INR bill (no text layer) with a slab overcharge",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "sample_conflict.yaml",
+   "name": "amendment and rate notice disagree",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "sample_overcharge.yaml",
+   "name": "wrong rate on one freight line",
+   "pass": true,
+   "diff": []
+  }
+ ]
+}

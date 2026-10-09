@@ -1,0 +1,13 @@
+name: INR bill dated after the last exchange-rate row
+mailbox: evals/mailboxes/b_inr
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: KCI/INV/41/0402
+    class: overcharge
+  verdict: cannot_determine
+  action: draft:request_document
+  missing_doc: FX Schedule Supplement
+why: Annexure III stops at June; August needs the FX Schedule Supplement from the
+  Treasury contact

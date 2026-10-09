@@ -1,0 +1,12 @@
+name: INR bill with lakh grouping and dd.mm.yyyy dates, wrong slab
+mailbox: evals/mailboxes/b_inr
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: KCI/INV/41/0315
+    class: overcharge
+  verdict: finding
+  amount_usd: '151.50'
+  action: draft:dispute
+why: 410 kg is in the 'above 300' slab (385.00); converted once at the May rate

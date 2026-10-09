@@ -1,0 +1,12 @@
+name: waiver seen only quoted inside the customer's forward
+mailbox: evals/mailboxes/a_waivers
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-00930
+    class: waived_but_billed
+  verdict: cannot_determine
+  action: draft:request_document
+  missing_doc: Noor Haddad
+why: the waivers contact's original email is not in the mailbox; ask for it

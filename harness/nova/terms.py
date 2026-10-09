@@ -92,10 +92,15 @@ def resolve_rate(world: World, c: Contract, lane: str, qty: Decimal, when: date)
         if a.contract_id != c.id or not a.signed or a.effective is None or a.effective > when:
             continue
         rate, minimum, srcs = _pick(a.rows, lane, qty, res.period or "*")
-        if rate is not None and (amd_start is None or a.effective >= amd_start):
+        own_rows = rate is not None
+        if own_rows and (amd_start is None or a.effective >= amd_start):
             amd = RateOption("amendment", rate, minimum, 1, srcs, a.reference or a.title, a.doc_id)
             amd_start = a.effective
         for ref in a.referenced:
+            # Only a document the amendment says it attaches or incorporates can be missing; a mention of the
+            # agreement's own annex that the amendment edits is not one, and explicit rows win for their lane.
+            if not ref["attached"] or own_rows:
+                continue
             if lane in ref["lanes"] and (ref["from"] or a.effective) <= when:
                 start = ref["from"] or a.effective
                 if amd_start is not None and start < amd_start:

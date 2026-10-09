@@ -1,0 +1,11 @@
+name: 'auto-renewing contract: alert on the non-renewal notice deadline'
+mailbox: evals/mailboxes/a_expiry_notice
+as_of: '2041-08-15'
+mode: supervised
+expect:
+  key:
+    contract_id: VLF-OBI-2041-07
+  verdict: finding
+  deadline: '2041-10-02'
+  action: internal:alert
+why: 31 Dec 2041 minus 90 days = 2 Oct 2041, 48 days away

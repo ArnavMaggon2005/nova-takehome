@@ -86,7 +86,34 @@ def norm_awb(s) -> str:
 
 
 def norm_lane(s) -> str:
-    return re.sub(r"\s", "", str(s or "").replace("–", "-").replace("—", "-")).upper()
+    s = str(s or "")
+    for sep in ("–", "—", "→", "->", "⇒", " to ", " TO ", "/"):
+        s = s.replace(sep, "-")
+    return re.sub(r"\s", "", s).upper()
+
+
+# Schedule 1 decision categories, canonical name <- words a contract may print instead
+CATEGORY_WORDS = [
+    ("billing_disputes", ("billing dispute", "billing_disputes", "disputes", "billing resolution")),
+    ("payment_terms", ("payment term", "payment_terms", "due date", "credit terms")),
+    ("waivers", ("waiver", "waive")),
+    ("rates", ("rate", "pricing", "tariff")),
+    ("treasury", ("treasury", "exchange", "fx", "currency")),
+    ("notices", ("notice", "key account", "account management")),
+]
+
+
+def norm_categories(printed) -> set:
+    out = set()
+    for raw in printed or []:
+        s = " ".join(str(raw).lower().replace("_", " ").split())
+        for canon, words in CATEGORY_WORDS:
+            if any(w.replace("_", " ") in s for w in words):
+                out.add(canon)
+                break
+        else:
+            out.add(s.replace(" ", "_"))
+    return out
 
 
 _CONFUSE = str.maketrans({"0": "O", "1": "I", "L": "I", "5": "S", "8": "B", "2": "Z", "6": "G"})
@@ -474,7 +501,7 @@ class World:
         for p in sch.get("persons") or []:
             c.persons.append(Person(str(p.get("name") or "").strip(), str(p.get("title") or ""),
                                     str(p.get("party_code") or "").upper(), str(p.get("side") or "carrier"),
-                                    {str(x).strip().lower().replace(" ", "_") for x in p.get("categories") or []},
+                                    norm_categories(p.get("categories")),
                                     str(p.get("address") or "").strip().lower(), Src.of(d, p.get("ref"))))
         if cid in self.contracts and self.contracts[cid].received <= c.received:
             return

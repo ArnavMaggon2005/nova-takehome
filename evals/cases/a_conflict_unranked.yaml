@@ -1,0 +1,15 @@
+name: signed amendment and an authorised rate advice disagree; contract won't rank
+  them
+mailbox: evals/mailboxes/a_conflict
+as_of: '2041-08-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01030
+    class: overcharge
+  verdict: conflict
+  amount_range:
+  - '0.00'
+  - '40.06'
+  action: escalate
+why: 'clause 5: equal standing; billed at the advice rate'

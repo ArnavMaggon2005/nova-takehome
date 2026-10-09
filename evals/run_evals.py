@@ -58,7 +58,44 @@ def check(case: dict, item: dict | None) -> list[str]:
         got = ((item.get("missing_doc") or {}).get("name") or "").lower()
         if not all(w in got for w in str(want_doc).lower().split()):
             bad.append(f"missing_doc {got or 'none'}, expected {want_doc}")
+    # optional checks added for this eval set (absent in the shipped samples, so they are unaffected)
+    if exp.get("retro") and item.get("retro") is not True:
+        bad.append("expected retro: true")
+    if exp.get("supersedes") and not item.get("supersedes"):
+        bad.append("expected a non-empty supersedes")
+    if exp.get("learned_at") and not (item.get("learned_at") or {}).get("feedback_item_id"):
+        bad.append("expected learned_at with a feedback_item_id")
     return bad
+
+
+def check_report(case: dict, report: dict) -> list[str]:
+    """Whole-report checks: strings that must not appear anywhere (e.g. an address an injected email asked for)."""
+    blob = json.dumps(report).lower()
+    return [f"report contains {s!r}" for s in case["expect"].get("report_must_not_contain") or [] if s.lower() in blob]
+
+
+def run_with_interim(harness: str, mailbox: Path, case: dict, state: Path, timeout: float, fb: dict):
+    """Like tools/run_mailbox.run, plus a report after each batch named in `interim_reports` (so a later batch can
+    produce supersedes / retro). Same fresh-process-per-step behaviour."""
+    from run_mailbox import harness_cmd, step
+    cmd = harness_cmd(harness)
+    state.mkdir(parents=True, exist_ok=True)
+    interim = {str(k): str(v) for k, v in (case.get("interim_reports") or {}).items()}
+    errors = []
+    for b in sorted(p for p in mailbox.glob("batch_*") if p.is_dir()):
+        rc, _, err = step(cmd, ["ingest", str(b), "--state-dir", str(state)], timeout)
+        if rc:
+            errors.append(f"ingest {b.name} exited {rc}: {err.strip()[-300:]}")
+        if b.name in interim:
+            step(cmd, ["report", "--as-of", interim[b.name], "--mode", case.get("mode", "supervised"), "--state-dir",
+                       str(state)], timeout)
+        if b.name in fb:
+            step(cmd, ["feedback", str(fb[b.name]), "--state-dir", str(state)], timeout)
+    rc, out, err = step(cmd, ["report", "--as-of", str(case["as_of"]), "--mode", case.get("mode", "supervised"),
+                              "--state-dir", str(state)], timeout)
+    if rc:
+        return None, errors + [f"report exited {rc}: {err.strip()[-300:]}"]
+    return json.loads(out), errors
 
 
 def main(argv=None) -> int:
@@ -81,9 +118,13 @@ def main(argv=None) -> int:
         mailbox = (ROOT / case["mailbox"]) if not Path(case["mailbox"]).is_absolute() else Path(case["mailbox"])
         fb = {k: (ROOT / v) for k, v in (case.get("feedback") or {}).items()}   # {batch_02: path/to/feedback.json}
         with tempfile.TemporaryDirectory(prefix="eval-") as tmp:
-            report, errors = run(a.harness, mailbox, str(case["as_of"]), case.get("mode", "supervised"),
-                                 Path(tmp) / "state", a.timeout, fb, log=lambda *_: None)
-        diff = errors if report is None else check(case, find_item(report, case["expect"]["key"]))
+            if case.get("interim_reports"):
+                report, errors = run_with_interim(a.harness, mailbox, case, Path(tmp) / "state", a.timeout, fb)
+            else:
+                report, errors = run(a.harness, mailbox, str(case["as_of"]), case.get("mode", "supervised"),
+                                     Path(tmp) / "state", a.timeout, fb, log=lambda *_: None)
+        diff = errors if report is None else \
+            check(case, find_item(report, case["expect"]["key"])) + check_report(case, report)
         ok = not diff
         results.append({"case": f.name, "name": case.get("name"), "pass": ok, "diff": diff})
         print(f"{'PASS' if ok else 'FAIL'}  {f.name}: {case.get('name', '')}" + ("" if ok else f"\n      {'; '.join(diff)[:400]}"))

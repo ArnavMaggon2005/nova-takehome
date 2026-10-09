@@ -1,0 +1,10 @@
+name: an open invoice due 15 days after as_of is not yet a risk
+mailbox: evals/mailboxes/a_late_fee_risk
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-01011
+    class: late_fee_risk
+  verdict: no_finding
+why: outside the 14-day window

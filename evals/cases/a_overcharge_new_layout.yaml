@@ -1,0 +1,13 @@
+name: 'unseen layout and wording: wrong bracket rate on one shipment'
+mailbox: evals/mailboxes/a_overcharge_layout
+as_of: '2041-07-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-00872
+    class: overcharge
+  verdict: finding
+  amount_usd: '145.38'
+  action: draft:dispute
+why: BOS-LAX 240 kg billed 5.85 vs H2 100-499.9 bracket 5.35; fuel 21.15% on the repriced
+  freight; the ORD-MIA line at 99.9 kg sits in the lower bracket and is billed right

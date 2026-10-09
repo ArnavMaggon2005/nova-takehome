@@ -219,6 +219,19 @@ def test_missing_incorporated_annex_is_cannot_determine():
     assert "Annex Q rev 9" in o.missing_doc["name"] and o.missing_doc["holder"]["person"] == "Kai Rates"
 
 
+def test_reference_to_the_annex_being_edited_is_not_a_missing_document():
+    """Caught by evals/cases/a_conflict_unranked.yaml: an amendment that sets a rate 'in Appendix 1' mentions the
+    agreement's own annex; that mention (not attached) must not turn the explicit row into cannot_determine."""
+    import json as _j
+    amd = amendment(rows=[(LANE, "range", "100", "299.5", "4.00")], referenced=[("Rate annex", [LANE], "2041-03-01")])
+    ex = _j.loads(amd["extract_json"])
+    ex["data"]["referenced_documents"][0]["attached_or_incorporated"] = False
+    amd["extract_json"] = _j.dumps(ex)
+    w = world([msa(), amd])
+    res = resolve_rate(w, w.contracts[CID], LANE, D("150"), date(2041, 7, 10))
+    assert res.status == "value" and res.options[0].rate == D("4.00")
+
+
 def test_waiver_from_waivers_contact_counts_rates_contact_does_not():
     inv = invoice("b1/0013.eml#INV-6.pdf", "2041-07-20T00:00:00Z", "INV-0006", "2041-07-20",
                   [("QA00000006", "Door delivery", "1", "40.00", "40.00", "2041-07-10", None),

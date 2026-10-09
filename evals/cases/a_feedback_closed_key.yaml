@@ -1,0 +1,12 @@
+name: the closed key stops appearing
+mailbox: evals/mailboxes/a_feedback_scope
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-00970
+    class: overcharge
+  verdict: no_finding
+why: close + rate_accepted on this key
+feedback:
+  batch_01: evals/feedback/a_feedback_scope.json

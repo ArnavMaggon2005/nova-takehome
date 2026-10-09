@@ -1,0 +1,46 @@
+{
+ "schema_version": "1.0",
+ "world": "EA",
+ "after_batch": "batch_01",
+ "decided_at": "2041-09-02T10:00:00Z",
+ "decided_by": {
+  "name": "Ruth Sandgren",
+  "role": "Payables Lead",
+  "entity": "OBI"
+ },
+ "items": [
+  {
+   "item_id": "fb-ea-02",
+   "finding_key": {
+    "invoice_id": "VF-41-00970",
+    "class": "overcharge"
+   },
+   "solicited": true,
+   "decision": "close",
+   "fact": {
+    "type": "rate_accepted",
+    "subject": {
+     "contract_id": "VLF-OBI-2041-07",
+     "lane": "BOS-LAX"
+    },
+    "value": {
+     "source": "rate notice",
+     "sent_by": "Marta Kovalenko",
+     "sent_on": "2041-07-25",
+     "effective_from": "2041-08-01",
+     "effective_to": "2041-12-31"
+    },
+    "evidence": "Velloran confirmed the advice"
+   },
+   "scope": {
+    "kind": "standing",
+    "applies_to": {
+     "contract_id": "VLF-OBI-2041-07",
+     "lane": "BOS-LAX"
+    },
+    "valid_from": "2041-08-01",
+    "valid_to": "2041-12-31"
+   }
+  }
+ ]
+}

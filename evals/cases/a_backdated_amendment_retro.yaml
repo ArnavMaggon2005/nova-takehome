@@ -1,0 +1,16 @@
+name: a later-signed amendment backdated to July reprices a July invoice
+mailbox: evals/mailboxes/a_backdated_amendment
+as_of: '2041-09-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-41-00950
+    class: overcharge
+  verdict: finding
+  amount_usd: '135.69'
+  action: draft:dispute
+  retro: true
+why: the invoice was clean against the rate card at 2041-08-31; the amendment (received
+  12 Sep) applies from 1 July
+interim_reports:
+  batch_01: '2041-08-31'

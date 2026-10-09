@@ -1,0 +1,12 @@
+name: autonomous mode holds back when the pickup date is only the invoice's
+mailbox: evals/mailboxes/a_autonomous
+as_of: '2041-08-31'
+mode: autonomous
+expect:
+  key:
+    invoice_id: VF-41-00991
+    class: overcharge
+  verdict: finding
+  amount_usd: '27.31'
+  action: human_review
+why: 'no tracking export or picked-up email for this waybill: unattended check 1 fails'

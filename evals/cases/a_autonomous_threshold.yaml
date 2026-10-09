@@ -1,0 +1,12 @@
+name: autonomous mode holds back a dispute of 5,000 or more
+mailbox: evals/mailboxes/a_autonomous
+as_of: '2041-08-31'
+mode: autonomous
+expect:
+  key:
+    invoice_id: VF-41-00990
+    class: overcharge
+  verdict: finding
+  amount_usd: '7284.00'
+  action: human_review
+why: unattended check 3 fails at >= 5,000.00

@@ -1,0 +1,12 @@
+name: the same one-off approval must not waive April
+mailbox: evals/mailboxes/a_one_off_waiver
+as_of: '2041-05-31'
+mode: supervised
+expect:
+  key:
+    invoice_id: VF-ST-4104
+    class: waived_but_billed
+  verdict: no_finding
+why: a one-off approval changes one key only (cap-at-40 mistake if it spreads)
+feedback:
+  batch_01: evals/feedback/a_one_off_waiver.json

@@ -30,3 +30,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: practice 99.9/100, learning 3/3; exam sheet = oracle; 34/34 unit tests
   - Broke / open: nothing broken; smoke test spend booked by hand since grading mode has no ledger
   - API spend so far: $6.69
+
+- **Phase 5: eval set and the bug it caught** (2026-10-09T08:14Z)
+  - Changed: eval set: 21 cases over 12 generated mailboxes in two invented worlds (new carriers/customers/people, airport-pair routes, other invoice layouts and column orders, text and dd.mm.yyyy dates, lakh grouping, INR with no FX row, quoted-only waiver, one-off waiver + uncovered month, backdated amendment with interim report, AI-directed email and footer, feedback that applies / must not spread / closes, autonomous hold-backs); run_evals extended (interim reports, retro, learned_at, report_must_not_contain); format hardening (text dates, column date order, route separators, Schedule 1 category synonyms)
+  - Score: evals 23/23 (21 mine); practice 99.9/100; exam sheet = oracle; examples 8/8; 40 unit tests
+  - Broke / open: a_conflict_unranked caught a real bug: an amendment mention of the agreement own appendix was treated as a missing document (explicit rate lost to cannot_determine); fixed in terms.py with a regression test
+  - API spend so far: $7.66
