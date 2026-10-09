@@ -192,6 +192,9 @@ SCHEDULE1 = O(
     span=NSPAN,
 )
 
+CONTRACT_CLAUSES = O(terms=CONTRACT_TERMS, schedule1=SCHEDULE1)
+CONTRACT_TABLES = O(rates=RATES, annexes=ANNEXES)
+
 RATE_ROW = O(lane=S("string"), band=E("minimum", "range", "open_ended"), low_kg=N("string"), high_kg=N("string"),
              rate=S("string"), currency=N("string"), ref=REF)
 AMENDMENT = O(

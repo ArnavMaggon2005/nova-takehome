@@ -87,6 +87,8 @@ def build_report(as_of: str, mode: str, state_dir: str) -> dict:
         for it in bucket:
             it.pop("_key", None)
             it.pop("_sig", None)
+    from .ingest import _spend_line
+    _spend_line()
     return printed
 
 
@@ -186,7 +188,7 @@ def _ids(items: list[dict], state: State, mode: str, as_of: str, world: World) -
     prev_as_of = parse_date(prev.get("as_of")) if prev else None
     used = set()
     for it in items:
-        base = f"{it['class']}:{it['_key'].split('|', 1)[1]}"
+        base = f"{it['class']}:{'/'.join(it['_key'].split('|')[1:])}"
         p = prev_items.get(it["_key"])
         if p is None:
             it["id"] = base

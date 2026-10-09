@@ -32,6 +32,8 @@ def run_feedback(feedback_file: str, state_dir: str) -> None:
     state.add_feedback(src.name, str(raw.get("after_batch") or ""), str(raw.get("decided_at") or ""), items)
     state.log("steps.jsonl", {"step": "feedback", "file": src.name, "items": len(items)})
     print(f"feedback {src.name}: stored {len(items)} item(s)", file=sys.stderr)
+    from .ingest import _spend_line
+    _spend_line()
 
 
 def key_tuple(k: dict) -> tuple:

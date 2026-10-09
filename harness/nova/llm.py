@@ -139,7 +139,7 @@ class LLM:
         if cache_doc_block and content:
             content[0] = {**content[0], "cache_control": {"type": "ephemeral"}}
         params = dict(model=model, max_tokens=max_tokens,
-                      system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
+                      system=[{"type": "text", "text": system}],
                       messages=[{"role": "user", "content": content}],
                       output_config={"effort": effort, "format": {"type": "json_schema", "schema": schema}})
         if model in config.THINKING_OFF_MODELS:

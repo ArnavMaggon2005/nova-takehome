@@ -29,4 +29,16 @@ dispute. Every assumption is one constant in [harness/config.py](../harness/conf
 | A20 | `ASSUME_LEARNED_AT_BATCH_FIELD = "after_batch"` | What goes in `learned_at.batch`? | The feedback file's `after_batch`. | The schema leaves it free; the grader checks only `feedback_item_id`. | another field name |
 
 ## Test of A1 against the practice key
-To be filled in once extraction runs: QS for TBX-US-EXP-01 2035-Q1 and 2035-Q2 under both readings.
+
+Computed from the real extractions with `harness/nova/rules/cashback.py` (re-sent invoice numbers in practice: one
+dated 2034-12-31, i.e. outside 2035-Q1, and TX-US-2035-0232 dated 2035-06-24 in 2035-Q2):
+
+| Mailbox | Period | Counted once | Counted twice | Practice key |
+|---|---|---|---|---|
+| practice | 2035-Q1 | QS 89,001.38 → 5% → **4,450.07** | QS 89,001.38 → **4,450.07** | finding 4,450.07 |
+| practice | 2035-Q2 | QS 72,397.30 < 79,000 → **no rebate** | QS 73,395.86 < 79,000 → **no rebate** | no_finding |
+| exam | 2030-Q3 | QS 86,146.83 → **4,307.34** | QS 89,382.07 → 4,469.10 | (no key) |
+| exam | 2030-Q4 | QS 71,865.85 → no rebate | QS 71,865.85 → no rebate | (no key) |
+
+Both readings reproduce the practice key, so the tie-break applies: count it **once** (same invoice number, one
+invoice). The exam Q3 rebate is therefore 4,307.34, which is what the local oracle already holds.

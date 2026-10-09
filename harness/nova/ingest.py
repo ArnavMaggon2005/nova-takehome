@@ -28,7 +28,15 @@ def run_ingest(batch_dir: str, state_dir: str) -> dict:
     state.log("steps.jsonl", {"step": "ingest", "batch": Path(batch_dir).name, "secs": round(budget.elapsed(), 1),
                               **summary})
     print(f"ingest {Path(batch_dir).name}: {summary}", file=sys.stderr)
+    _spend_line()
     return summary
+
+
+def _spend_line() -> None:
+    from .spend import summary_line
+    line = summary_line()
+    if line:
+        print(line, file=sys.stderr)
 
 
 def extract_pending(state: State, budget: Budget, launch_fraction: float) -> dict:

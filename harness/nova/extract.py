@@ -123,14 +123,17 @@ class Extractor:
         return {"status": "extracted", "doc_type": "email", "extract_json": json.dumps(out), "method": "text"}
 
     def _contract(self, doc: dict, pages: list[str]) -> dict:
+        """Two calls over the full text: clauses + Schedule 1, then the rate and annex tables. (Structured output
+        puts each schema in the prompt prefix, so separate calls can't share a cached copy of the contract.)"""
+        sections = (("clauses", P.CONTRACT_TERMS + "\n\n" + P.SCHEDULE1, SC.CONTRACT_CLAUSES),
+                    ("tables", P.RATES + "\n\n" + P.ANNEXES, SC.CONTRACT_TABLES))
         jobs = {name: self.sections.submit(self._checked, config.MODEL_CONTRACT, instr, schema, pages,
-                                           config.EFFORT_CONTRACT, f"msa_{name}", doc, True)
-                for name, instr, schema in (("terms", P.CONTRACT_TERMS, SC.CONTRACT_TERMS),
-                                            ("rates", P.RATES, SC.RATES), ("annexes", P.ANNEXES, SC.ANNEXES),
-                                            ("schedule1", P.SCHEDULE1, SC.SCHEDULE1))}
+                                           config.EFFORT_CONTRACT, f"msa_{name}", doc)
+                for name, instr, schema in sections}
         parts = {k: f.result() for k, f in jobs.items()}
-        return {"data": {k: v["data"] for k, v in parts.items()},
-                "errors": [e for v in parts.values() for e in v["errors"]],
+        data = {"terms": parts["clauses"]["data"].get("terms"), "schedule1": parts["clauses"]["data"].get("schedule1"),
+                "rates": parts["tables"]["data"].get("rates"), "annexes": parts["tables"]["data"].get("annexes")}
+        return {"data": data, "errors": [e for v in parts.values() for e in v["errors"]],
                 "stats": {k: v["stats"] for k, v in parts.items()},
                 "conf": min(v["conf"] for v in parts.values())}
 
@@ -227,7 +230,8 @@ def parse_table(spec: dict, pages: list[str]) -> list[dict]:
             if not inv:
                 continue
             amt = cell("amount") or ""
-            cur = cell("currency") or (re.search(r"\b([A-Z]{3})\b", amt).group(1) if re.search(r"\b[A-Z]{3}\b", amt) else None)
+            code = re.search(r"\b([A-Z]{3})\b", f"{cell('currency') or ''} {amt}")   # currency may share the cell
+            cur = code.group(1) if code else None
             row.update(invoice_id=inv, invoice_date=_date(cell("invoice_date")), due_date=_date(cell("due_date")),
                        amount=str(dec(amt)) if dec(amt) is not None else None, currency=cur,
                        status=statuses.get((cell("status") or "").strip().lower(), (cell("status") or "").lower()),
