@@ -42,3 +42,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: calibration: 51 items, 51 right, Brier 0.0166, AUROC not measurable (no wrong item); practice 99.6-99.9 (confidence points slightly lower by design)
   - Broke / open: no wrong items exist to fit or test AUROC; weights stay hand-set (see DESIGN.md)
   - API spend so far: $7.66
+
+- **Phase 7: robustness** (2026-10-09T08:17Z)
+  - Changed: robustness tests (no model calls): step budget leaves unstarted docs pending and the next step finishes them; one failing document is isolated (failed after two attempts, others extracted); refusal retries on the other model; a report over corrupt or empty state is schema-valid; the test suite can never spend (extraction stubbed)
+  - Score: 44/44 unit tests (spend unchanged with the key loaded); practice 99.7; exam sheet unchanged
+  - Broke / open: none
+  - API spend so far: $7.66

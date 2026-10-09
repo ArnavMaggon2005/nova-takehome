@@ -525,7 +525,7 @@
        "step": "ingest",
        "rc": 0,
        "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 3.0
+       "secs": 2.9
       },
       {
        "step": "report",
