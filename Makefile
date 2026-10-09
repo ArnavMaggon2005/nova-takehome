@@ -37,6 +37,7 @@ sheet: venv
 	$(PY) tools/run_mailbox.py --data data/exam --harness $(HARNESS) --out out/exam_report.json --sheet answer_sheet.json
 
 eval: venv
+	$(PY) tools/check_no_hardcoding.py
 	$(PY) evals/run_evals.py --harness $(HARNESS) $(if $(K),-k $(K),)
 
 validate: venv

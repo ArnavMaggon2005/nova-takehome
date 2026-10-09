@@ -11,30 +11,32 @@
 - feedback: take in a person's decisions on what you escalated (feedback.json) and let them change later reports.
 
 The environment gives ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL. Keep the argument names as they are: grader/validate.py
-checks them. Replace the NotImplementedError bodies with your code.
+checks them. The work is done by the `nova` package next to this file (docs/PLAN.md section 13).
 """
 from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))   # config.py and the nova package live next to this file
 
 DEFAULT_STATE = ".state"
 
 
 def ingest(batch_dir: str, state_dir: str) -> None:
-    raise NotImplementedError(
-        f"ingest is not written yet: read the .eml files in {batch_dir} and keep what you learn under {state_dir}")
+    from nova.ingest import run_ingest
+    run_ingest(batch_dir, state_dir)
 
 
 def report(as_of: str, mode: str, state_dir: str) -> dict:
-    raise NotImplementedError(
-        f"report is not written yet: return the report.json dict for --as-of {as_of} in {mode} mode "
-        "(see grader/schema/report.schema.json and data/examples/*/expected_finding.json)")
+    from nova.report import run_report
+    return run_report(as_of, mode, state_dir)
 
 
 def feedback(feedback_file: str, state_dir: str) -> None:
-    raise NotImplementedError(
-        f"feedback is not written yet: store the decisions in {feedback_file} under {state_dir} so later reports use them")
+    from nova.feedback import run_feedback
+    run_feedback(feedback_file, state_dir)
 
 
 def main(argv=None) -> int:
