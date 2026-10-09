@@ -18,3 +18,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: examples 8/8; practice 99.9/100; exam sheet = oracle 9/9; exam report 55/55 citations resolve
   - Broke / open: nothing new; confidence still flat (~0.96) so AUROC is not measurable yet (Phase 6)
   - API spend so far: $6.55
+
+- **Phase 3: modes, unattended test, time budget** (2026-10-09T07:48Z)
+  - Changed: modes and time verified: unattended 5-check test, summed 5k threshold, open-conflict index, outbox addressed to Schedule 1 contacts (no address in any outbound field), versioned ids/supersedes/retro, escalation log; cold ingest timings 65-145 s per batch at 4 threads (budget 300 s)
+  - Score: practice 99.9/100 both modes (actions 24/24 supervised and autonomous, escalated 4%, no hard gate); exam sheet = oracle 9/9
+  - Broke / open: none
+  - API spend so far: $6.55
