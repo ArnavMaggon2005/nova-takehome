@@ -40,5 +40,8 @@ dated 2034-12-31, i.e. outside 2035-Q1, and TX-US-2035-0232 dated 2035-06-24 in 
 | exam | 2030-Q3 | QS 86,146.83 → **4,307.34** | QS 89,382.07 → 4,469.10 | (no key) |
 | exam | 2030-Q4 | QS 71,865.85 → no rebate | QS 71,865.85 → no rebate | (no key) |
 
-Both readings reproduce the practice key, so the tie-break applies: count it **once** (same invoice number, one
-invoice). The exam Q3 rebate is therefore 4,307.34, which is what the local oracle already holds.
+Both readings reproduce the practice key, so the tie-break applies: count it **once**. The reason: the MSA defines
+qualifying spend on "invoices dated in the period" (clause 1.1), and a re-sent copy is the same invoice with the
+same number and the same date, so it's one invoice in that sum. The glossary's "a line billed twice counts twice" covers
+the same line on two different invoice numbers, which is a different case. The exam Q3 rebate is therefore 4,307.34,
+which is what the local oracle already holds. This is the least certain call in the submission (DESIGN.md says so).

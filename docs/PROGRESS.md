@@ -24,3 +24,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: practice 99.9/100 both modes (actions 24/24 supervised and autonomous, escalated 4%, no hard gate); exam sheet = oracle 9/9
   - Broke / open: none
   - API spend so far: $6.55
+
+- **Phase 4: feedback** (2026-10-09T08:02Z)
+  - Changed: feedback verified for every glossary kind (confirm sender_authority, close dispute_closed, close rate_accepted, one_off_approval, reject, resolve_conflict, override_amount, unknown) with no-spread checks; cache key made explicit (per-kind prompt version + model + content hash, checked on read, prompt fingerprints pinned by test); dev final mode NOVA_DEV_DEFAULT_MODELS; grading-mode smoke test (no dev file, stripped env) passed on an example mailbox
+  - Score: practice 99.9/100, learning 3/3; exam sheet = oracle; 34/34 unit tests
+  - Broke / open: nothing broken; smoke test spend booked by hand since grading mode has no ledger
+  - API spend so far: $6.69

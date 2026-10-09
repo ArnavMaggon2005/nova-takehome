@@ -43,8 +43,14 @@ PRICES = {   # USD per million tokens (input, output, cache read); cache writes 
 
 # ---- models ----------------------------------------------------------------------------------------------------------
 # Contracts, amendments, annexes, rate notices and Schedule 1 need the strongest reader; everything else is routine.
-MODEL_CONTRACT = os.environ.get("NOVA_MODEL_CONTRACT", "claude-opus-5-5")
-MODEL_DOC = os.environ.get("NOVA_MODEL_DOC", "claude-sonnet-5-5")
+DEFAULT_MODEL_CONTRACT = "claude-opus-5-5"
+DEFAULT_MODEL_DOC = "claude-sonnet-5-5"
+# Dev "final" mode: NOVA_DEV_DEFAULT_MODELS=1 keeps the shared cache and ledger but ignores any model override, so
+# the code defaults above run (used for the final make grade / make sheet).
+_DEFAULT_MODELS_ONLY = os.environ.get("NOVA_DEV_DEFAULT_MODELS", "").strip() in ("1", "true", "yes")
+MODEL_CONTRACT = DEFAULT_MODEL_CONTRACT if _DEFAULT_MODELS_ONLY else \
+    os.environ.get("NOVA_MODEL_CONTRACT", DEFAULT_MODEL_CONTRACT)
+MODEL_DOC = DEFAULT_MODEL_DOC if _DEFAULT_MODELS_ONLY else os.environ.get("NOVA_MODEL_DOC", DEFAULT_MODEL_DOC)
 EFFORT_CLASSIFY = "low"
 EFFORT_DOC = "low"
 EFFORT_CONTRACT = "medium"

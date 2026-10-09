@@ -1,0 +1,38 @@
+{
+ "amendment": [
+  1,
+  "a10813d28713ab50"
+ ],
+ "classify": [
+  1,
+  "b57afb5a4d331af6"
+ ],
+ "contract": [
+  1,
+  "1dad1d30e4ee1f4a"
+ ],
+ "email": [
+  1,
+  "cf2fe5b73469014c"
+ ],
+ "invoice": [
+  1,
+  "32e75da36c8db01e"
+ ],
+ "rate_notice": [
+  1,
+  "e5758633f6ed1a2b"
+ ],
+ "shipping": [
+  1,
+  "132df28ac11e4cfa"
+ ],
+ "table": [
+  1,
+  "a8339a540b1d36c7"
+ ],
+ "vision": [
+  1,
+  "35f388fa54b4eccc"
+ ]
+}

@@ -22,8 +22,7 @@ from pathlib import Path
 import config
 
 from . import spend
-
-PROMPT_VERSION = "v1"
+from .prompt_versions import version_tag
 _SLOTS = threading.BoundedSemaphore(max(1, config.LLM_THREADS))   # global cap on concurrent API calls
 
 
@@ -76,9 +75,11 @@ class LLM:
                   max_tokens: int, purpose: str, cache_doc_block: bool = False) -> dict:
         """-> parsed JSON object. `blocks` is the user content (text/image blocks); the last text block is the
         document. cache_doc_block marks the first block with cache_control (shared contract text)."""
-        key = self._key(model, system, blocks, schema, effort)
+        version = version_tag(purpose)
+        key = self.cache_key(model, version, system, blocks, schema, effort)
         hit = self._cache_get(key)
-        if hit is not None:
+        if hit is not None and hit.get("requested_model", model) == model and \
+                hit.get("prompt_version", version) == version:
             with self._lock:
                 self.usage["cached"] += 1
             return hit["data"]
@@ -87,14 +88,18 @@ class LLM:
         except _Refused:
             other = config.MODEL_DOC if model == config.MODEL_CONTRACT else config.MODEL_CONTRACT
             data, resp_model, usage = self._call(other, system, blocks, schema, effort, max_tokens, cache_doc_block)
-        self._cache_put(key, {"data": data, "model": resp_model, "usage": usage, "purpose": purpose})
+        self._cache_put(key, {"data": data, "model": resp_model, "requested_model": model, "prompt_version": version,
+                              "content_sha256": _content_hash(blocks), "usage": usage, "purpose": purpose})
         self.state.log("llm_usage.jsonl", {"purpose": purpose, "model": resp_model, **usage})
         return data
 
     # ---- internals ---------------------------------------------------------------------------------------------------
-    def _key(self, model, system, blocks, schema, effort) -> str:
+    @staticmethod
+    def cache_key(model: str, version: str, system: str, blocks: list[dict], schema: dict, effort: str) -> str:
+        """sha256 over: prompt version of this extraction kind, model, effort, system prompt, schema, and every content
+        block (instructions + the document text, or the image's hash). Same document + model + prompt -> same key."""
         h = hashlib.sha256()
-        for part in (PROMPT_VERSION, model, effort, system, json.dumps(schema, sort_keys=True)):
+        for part in (version, model, effort, system, json.dumps(schema, sort_keys=True)):
             h.update(part.encode())
             h.update(b"\x00")
         for b in blocks:
@@ -223,6 +228,14 @@ class LLM:
 
 class _Refused(Exception):
     pass
+
+
+def _content_hash(blocks: list[dict]) -> str:
+    h = hashlib.sha256()
+    for b in blocks:
+        h.update(json.dumps(b, sort_keys=True).encode() if b.get("type") != "image"
+                 else hashlib.sha256(b["source"]["data"].encode()).digest())
+    return h.hexdigest()
 
 
 def _parse_json(text: str):
