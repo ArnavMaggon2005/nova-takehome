@@ -11,7 +11,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.931,
    "evidence": [
     {
      "doc": "batch_02/0023.eml#ap-register-2031-02-28.xlsx",
@@ -42,7 +42,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.917,
    "evidence": [
     {
      "doc": "batch_01/0011.eml",
@@ -83,7 +83,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.87,
+   "confidence": 0.786,
    "evidence": [
     {
      "doc": "batch_02/0016.eml#CDI-3031-0306.pdf",
@@ -134,7 +134,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.931,
    "evidence": [
     {
      "doc": "batch_01/0010.eml#CDU-3051266.pdf",
@@ -180,7 +180,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:request_document",
-   "confidence": 0.924,
+   "confidence": 0.87,
    "evidence": [
     {
      "doc": "batch_01/0004.eml#CDA-US-EXP-E91-AMD-1.pdf",
@@ -218,7 +218,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.931,
    "evidence": [
     {
      "doc": "batch_02/0004.eml#CDU-3051297.pdf",
@@ -277,7 +277,7 @@
    ],
    "deadline": null,
    "action": "escalate",
-   "confidence": 0.924,
+   "confidence": 0.87,
    "evidence": [
     {
      "doc": "batch_01/0004.eml#CDA-US-EXP-E91-AMD-1.pdf",
@@ -328,7 +328,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.917,
    "evidence": [
     {
      "doc": "batch_01/0007.eml",
@@ -364,7 +364,7 @@
    "amount_range": null,
    "deadline": null,
    "action": "draft:dispute",
-   "confidence": 0.961,
+   "confidence": 0.917,
    "evidence": [
     {
      "doc": "batch_02/0009.eml",
@@ -403,7 +403,7 @@
     "amount_range": null,
     "deadline": null,
     "action": "draft:claim_credit",
-    "confidence": 0.906,
+    "confidence": 0.796,
     "evidence": [
      {
       "doc": "batch_01/0003.eml#MSA-CDA-US-EXP-E91.pdf",
@@ -448,7 +448,7 @@
     "amount_range": null,
     "deadline": "2031-04-01",
     "action": "internal:alert",
-    "confidence": 0.957,
+    "confidence": 0.943,
     "evidence": [
      {
       "doc": "batch_01/0003.eml#MSA-CDA-US-EXP-E91.pdf",
@@ -471,7 +471,7 @@
     "amount_range": null,
     "deadline": "2031-03-10",
     "action": "internal:payment_reminder",
-    "confidence": 0.957,
+    "confidence": 0.924,
     "evidence": [
      {
       "doc": "batch_02/0023.eml#ap-register-2031-02-28.xlsx",

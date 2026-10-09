@@ -1,0 +1,262 @@
+{
+ "items": 51,
+ "brier": 0.01657470588235294,
+ "auroc": null,
+ "rows": [
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_01 duplicate:TX-US-2034-0386"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_01 late_fee_not_owed:TX-US-2035-0215"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_01 overcharge:TX-US-2035-0198"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_01 overcharge:TX-US-2035-0204"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_01 overcharge:TX-US-2035-0210"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_01 waived_but_billed:TX-US-2034-0383"
+  },
+  {
+   "confidence": 0.69,
+   "right": 1,
+   "item": "practice batch_01 cashback:TBX-US-EXP-01/2035-Q1/rebate"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 duplicate:TX-US-2034-0386"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 duplicate:TX-US-2035-0232"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_02 late_fee_not_owed:TX-US-2035-0215"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_02 late_fee_not_owed:TX-US-2035-0265"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0198"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0204"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0236"
+  },
+  {
+   "confidence": 0.87,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0237"
+  },
+  {
+   "confidence": 0.87,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0242"
+  },
+  {
+   "confidence": 0.968,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0256"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TX-US-2035-0259"
+  },
+  {
+   "confidence": 0.9,
+   "right": 1,
+   "item": "practice batch_02 overcharge:TXI/35-36/0030"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_02 waived_but_billed:TX-US-2034-0383"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "practice batch_02 waived_but_billed:TX-US-2035-0267"
+  },
+  {
+   "confidence": 0.69,
+   "right": 1,
+   "item": "practice batch_02 cashback:TBX-US-EXP-01/2035-Q1/rebate"
+  },
+  {
+   "confidence": 0.943,
+   "right": 1,
+   "item": "practice batch_02 expiry:TBX-US-EXP-01"
+  },
+  {
+   "confidence": 0.924,
+   "right": 1,
+   "item": "practice batch_02 late_fee_risk:TX-US-2035-0252"
+  },
+  {
+   "confidence": 0.877,
+   "right": 1,
+   "item": "example cashback:TBX-US-EXP-E58/2033-Q2/rebate"
+  },
+  {
+   "confidence": 0.668,
+   "right": 1,
+   "item": "example overcharge:TX-US-2032-5166"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "example duplicate:TX-US-2033-5511"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "example duplicate:TX-US-2032-5441"
+  },
+  {
+   "confidence": 0.943,
+   "right": 1,
+   "item": "example expiry:TBX-US-EXP-E24"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "example late_fee_not_owed:TX-US-2032-5496"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "example overcharge:TX-US-2032-5394"
+  },
+  {
+   "confidence": 0.917,
+   "right": 1,
+   "item": "example waived_but_billed:TX-US-2033-5337"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_autonomous_threshold"
+  },
+  {
+   "confidence": 0.802,
+   "right": 1,
+   "item": "eval a_autonomous_weak_pickup"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_backdated_amendment_retro"
+  },
+  {
+   "confidence": 0.87,
+   "right": 1,
+   "item": "eval a_conflict_unranked"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_duplicate_alias_rebill"
+  },
+  {
+   "confidence": 0.943,
+   "right": 1,
+   "item": "eval a_expiry_notice_deadline"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_feedback_must_not_spread"
+  },
+  {
+   "confidence": 0.968,
+   "right": 1,
+   "item": "eval a_feedback_rate_accepted_applies"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_injection_email"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval a_injection_footer"
+  },
+  {
+   "confidence": 0.87,
+   "right": 1,
+   "item": "eval a_late_fee_risk_14_days"
+  },
+  {
+   "confidence": 0.961,
+   "right": 1,
+   "item": "eval a_one_off_waiver_march"
+  },
+  {
+   "confidence": 0.881,
+   "right": 1,
+   "item": "eval a_overcharge_new_layout"
+  },
+  {
+   "confidence": 0.832,
+   "right": 1,
+   "item": "eval a_waiver_forwarded_quoted"
+  },
+  {
+   "confidence": 0.818,
+   "right": 1,
+   "item": "eval b_inr_no_fx_row"
+  },
+  {
+   "confidence": 0.9,
+   "right": 1,
+   "item": "eval b_inr_overcharge_lakh"
+  },
+  {
+   "confidence": 0.786,
+   "right": 1,
+   "item": "eval b_scanned_bill"
+  },
+  {
+   "confidence": 0.668,
+   "right": 1,
+   "item": "eval sample_conflict"
+  },
+  {
+   "confidence": 0.931,
+   "right": 1,
+   "item": "eval sample_overcharge"
+  }
+ ]
+}

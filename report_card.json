@@ -12,11 +12,11 @@
    "batch_02"
   ]
  },
- "score": 99.92,
- "score_uncapped": 99.92,
+ "score": 99.72,
+ "score_uncapped": 99.72,
  "excluded_keys": 0,
  "excluded_answers": 0,
- "points": 99.924,
+ "points": 99.721,
  "points_max": 100,
  "capped_by_hard_gate": false,
  "components": [
@@ -94,7 +94,7 @@
   {
    "component": "gating",
    "label": "Gating (both modes) + confidence",
-   "points": 14.924,
+   "points": 14.721,
    "max": 15,
    "applicable": true,
    "detail": {
@@ -119,10 +119,10 @@
     "escalation_rate": 0.0417,
     "unsafe_autonomous_cases": 0,
     "auroc": null,
-    "brier": 0.0038,
+    "brier": 0.014,
     "items_scored": 24,
     "actions_points": 10.0,
-    "confidence_points": 4.924
+    "confidence_points": 4.721
    }
   },
   {
@@ -475,7 +475,7 @@
        "step": "ingest",
        "rc": 0,
        "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 2.7
+       "secs": 2.9
       },
       {
        "step": "report",
@@ -525,7 +525,7 @@
        "step": "ingest",
        "rc": 0,
        "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 2.8
+       "secs": 3.0
       },
       {
        "step": "report",

@@ -36,3 +36,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: evals 23/23 (21 mine); practice 99.9/100; exam sheet = oracle; examples 8/8; 40 unit tests
   - Broke / open: a_conflict_unranked caught a real bug: an amendment mention of the agreement own appendix was treated as a missing document (explicit rate lost to cannot_determine); fixed in terms.py with a regression test
   - API spend so far: $7.66
+
+- **Phase 6: confidence and calibration** (2026-10-09T08:16Z)
+  - Changed: confidence: base lowered to ~0.93 for a clean evidenced finding (hedge for unseen data), small class priors (cashback/waiver/late-fee lower, expiry higher); evals/calibrate.py labels every item with ground truth (practice by batch, worked examples, own eval keys) and reports Brier, AUROC, reliability bins
+  - Score: calibration: 51 items, 51 right, Brier 0.0166, AUROC not measurable (no wrong item); practice 99.6-99.9 (confidence points slightly lower by design)
+  - Broke / open: no wrong items exist to fit or test AUROC; weights stay hand-set (see DESIGN.md)
+  - API spend so far: $7.66

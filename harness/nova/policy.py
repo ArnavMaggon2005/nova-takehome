@@ -106,7 +106,7 @@ def unattended(o: Outcome, sums: dict, open_conflicts: set) -> tuple[bool, list[
 # ---- confidence ---------------------------------------------------------------------------------------------------------
 def confidence(o: Outcome) -> float:
     w = config.CONF_WEIGHTS
-    z = config.CONF_BASE
+    z = config.CONF_BASE + config.CONF_CLASS_PRIOR.get(o.cls, 0.0)
     f = o.features
     if o.pickup_decides and any(src not in STRONG_PICKUP for _, src in o.shipments):
         z += w["pickup_weak"]

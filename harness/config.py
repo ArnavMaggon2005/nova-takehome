@@ -126,7 +126,9 @@ ASSUME_FEEDBACK_FROM_DECIDED_DATE = True
 ASSUME_LEARNED_AT_BATCH_FIELD = "after_batch"
 
 # ---- confidence (section 9 of docs/PLAN.md) ----------------------------------------------------------------------------
-CONF_BASE = 3.2
+CONF_BASE = 2.6            # a clean, fully evidenced finding -> ~0.93 (hedged below practice accuracy for unseen data)
+CONF_CLASS_PRIOR = {"cashback": -0.3, "waived_but_billed": -0.2, "late_fee_not_owed": -0.2, "duplicate": 0.0,
+                    "overcharge": 0.0, "late_fee_risk": 0.0, "expiry": 0.3}
 CONF_WEIGHTS = {
     "pickup_weak": -1.2,
     "scan": -0.9,
