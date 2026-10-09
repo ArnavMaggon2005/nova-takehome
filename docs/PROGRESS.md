@@ -66,3 +66,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: make validate 9/9 (practice 99.7, exam 8165.33 unchanged, evals 23/23)
   - Broke / open: none; no API calls in this step
   - API spend so far: $9.03
+
+- **Trim DESIGN.md to about 800 words** (2026-10-09T14:38Z)
+  - Changed: DESIGN.md trimmed from 998 to 820 words by deletion only (headings and diagram unchanged; cut facts remain in SOLUTION/ASSUMPTIONS/AI_USE/WALKTHROUGH)
+  - Score: make validate 9/9
+  - Broke / open: none; no API calls
+  - API spend so far: $9.03
