@@ -2,38 +2,30 @@
 
 ## Tools
 
-- **Claude Code** (Anthropic's CLI, in VS Code; model Claude Opus 5.5) wrote the plan, all of the harness code, the
-  tests, the eval set and these documents, working in one session.
-- **Claude Opus 5.5 and Claude Sonnet 5.5** are called by the harness itself through the `anthropic` SDK. They only
-  read documents into JSON; no decision is made by a model.
-- **Claude on claude.ai** for my planning chat (log linked below).
+- **Claude Code** (Opus 5.5, in VS Code, running in WSL). It did the heavy lifting: the plan, all of the harness code, the tests, the eval set and the first drafts of the docs.
+- **Claude Opus 5.5 and Sonnet 5.5 through the API.** The harness itself calls these, but only to read documents into JSON. Every verdict, amount and action is plain Python.
 
-## How you worked with them
+## How I worked with them
 
-I worked plan-first. Claude Code read the whole brief, grader and data, then wrote `docs/PLAN.md`. Nothing was coded
-until I approved it. I made the calls that were mine:
-- **Budget:** a hard $20 limit, a spend ledger, and a stop before $15. Actual spend was $9.03.
-- **Models:** Sonnet for development; Opus for contracts in the final runs.
-- **The exam oracle:** kept in a gitignored `local/` folder that the harness may not read, plus a tool that fails if
-  any id or name from `data/` appears in the harness.
-- **Ambiguities:** settled in the order glossary, worked examples, practice key as evidence, then the conservative
-  reading. Each one is a constant and an entry in `docs/ASSUMPTIONS.md`.
-- **The eval set:** invented worlds that must not look like the practice files.
-- **The repo:** private, with CI manual only.
+I didn't let Claude Code write any code until there was a plan I agreed with. First it read the whole brief, the glossary, the grader and the data, and wrote `docs/PLAN.md`. I reviewed that before giving the go-ahead.
 
-Each phase ended with `make grade`, a commit, a push and a note in `docs/PROGRESS.md`. I reviewed two checkpoints: the
-exam sheet against my hand-derived oracle, and the end.
+After that, my job was mostly making decisions and checking the work:
 
-Where it went wrong, and how it was caught:
-- **Contracts:** the first contract extraction paid prompt-cache writes that were never read. Found in the token usage;
-  contracts are now two calls instead of four.
-- **AP register:** a column map put the currency and the amount in the same cell, which dropped a late-fee risk.
-  Found by the practice card and fixed in the parser.
-- **Missing documents:** the eval set found that a mention of the agreement's own appendix was treated as a missing
-  document (SOLUTION.md).
-- **Shell slips:** one push ran from the wrong folder and was refused harmlessly; a few shell-quoting slips ran nothing
-  and spent nothing.
-- **Environment:** `make` was missing on Windows (we work in WSL), and the first API key needed a workspace header.
+- **Cost.** I set a hard $20 limit on my API key. Claude Code kept a spend ledger and had to stop and ask me before going over $15. During development everything ran on Sonnet with a shared cache. For the final runs I had it use the real defaults (Opus for contracts) while keeping the cache, so only the contracts were re-extracted. Total spend was $9.03.
+- **Not overfitting.** The brief warns that a harness tuned to the practice files scored about 11/100 on the hidden set. So I had Claude Code hand-calculate the exam answers as an oracle, kept it in a gitignored `local/` folder the harness can't read, and added a check that fails if any id, AWB, lane or name from `data/` appears in the harness code. When the harness and the oracle disagreed, the rule was to go back to the documents, never to special-case.
+- **Ambiguities.** I decided not to email GoComet and to make assumptions instead, resolved in this order: the glossary, the worked examples, the practice key (as evidence of how a rule is read, never copied), and otherwise the conservative reading, since a wrong dispute costs double. Each assumption is a named constant with an entry in `docs/ASSUMPTIONS.md`. The one I'm least sure about is whether a re-sent paid invoice counts once or twice in the rebate's qualifying spend. I went with once, because the contract defines spend on "invoices dated in the period" and a re-sent copy is the same invoice.
+- **Grading safety.** All the dev conveniences (cache, ledger, Sonnet override) live in a gitignored `.nova_dev.env`. I had Claude Code add a test proving none of them is active without that file, so nothing can change or block a call when GoComet runs the code.
+- **Setup.** I worked in WSL rather than Windows, used a workspace-scoped API key, kept the repo private, and made CI manual only so it wouldn't spend my credit on every push. I also lowered the per-step time budget from 300 s to 240 s, since the real limit isn't stated.
+
+Each phase ended with `make grade`, a commit, a push and a short note in `docs/PROGRESS.md`. I stopped it at two checkpoints: when the exam sheet was compared with the oracle (9/9 matched), and at the end.
+
+## What went wrong along the way
+
+- The first contract extraction paid for prompt-cache writes that were never read. We spotted it in the token usage and cut contracts from four calls to two.
+- An AP register column map put the currency and the amount in the same cell, which silently dropped a late-fee risk. The practice report card caught it, and the parser was fixed.
+- The eval set caught a real bug: a mention of the agreement's own appendix was being treated as a missing document. SOLUTION.md has the details.
+- A unit test was passing only because the shared dev cache held an old fake reply. The tests are now isolated from the dev cache.
+- Smaller things: `make` wasn't available on Windows (hence WSL), my first API key was organisation-level and needed a workspace, one push ran from the wrong folder and was refused, and a few shell-quoting mistakes ran nothing.
 
 ## Written without AI
 
@@ -41,9 +33,4 @@ No code or document text. My part was the direction and every decision listed ab
 
 ## Prompt log
 
-- [ai_log/claude_ai_planning_chat.md](ai_log/claude_ai_planning_chat.md): my planning chat on claude.ai.
-- [ai_log/claude_code_session.md](ai_log/claude_code_session.md): the Claude Code session that did the work.
-
-The Claude Code export holds every prompt I sent, every reply, and one line per tool call. Raw tool output (file and command dumps), the model's internal thinking
-and system messages are left out for length. No secret appeared in the session; the API key was never printed, and
-the export refuses to write anything key-shaped.
+- [ai_log/claude_code_session.md](ai_log/claude_code_session.md): the full Claude Code session. It has every prompt I sent, every reply, and one line per tool call. Raw tool output, the model's internal reasoning and system messages are left out for length. No secrets appeared in the session: the API key was never printed, and the export refuses to write anything that looks like a key.

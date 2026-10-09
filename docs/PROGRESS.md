@@ -60,3 +60,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: unchanged: practice 99.7, exam sheet = oracle, evals 23/23 (no harness change)
   - Broke / open: none
   - API spend so far: $9.03
+
+- **Final docs: 240 s budget, edited write-ups, full prompt log** (2026-10-09T14:24Z)
+  - Changed: 240 s step budget (config + walkthrough figures), tests isolated from the dev cache (tests/conftest.py), my edited DESIGN/SOLUTION/AI_USE, planning-chat placeholder removed, full prompt log re-exported
+  - Score: make validate 9/9 (practice 99.7, exam 8165.33 unchanged, evals 23/23)
+  - Broke / open: none; no API calls in this step
+  - API spend so far: $9.03

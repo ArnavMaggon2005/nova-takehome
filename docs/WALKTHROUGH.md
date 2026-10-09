@@ -43,7 +43,7 @@ docs/                     PLAN.md, ASSUMPTIONS.md, PROGRESS.md, WALKTHROUGH.md
 | Command | Entry | What happens |
 |---|---|---|
 | `ingest <batch>` | `harness.py:ingest` -> `ingest.run_ingest` | `mailbox.read_batch` -> `State.add_doc` (new hashes only) -> `extract_pending` (`Extractor.run`) inside `NOVA_STEP_BUDGET_S`; unfinished docs stay pending |
-| `report --as-of D --mode M` | `harness.py:report` -> `report.run_report` -> `evaluate.build_report` | finish pending extraction first (60% of budget), build `World`, run the rules with and without feedback, apply directives, actions, confidence, evidence, ids; print JSON |
+| `report --as-of D --mode M` | `harness.py:report` -> `report.run_report` -> `evaluate.build_report` | finish pending extraction first (60% of the 240 s budget, about 144 s), build `World`, run the rules with and without feedback, apply directives, actions, confidence, evidence, ids; print JSON |
 | `feedback <file>` | `harness.py:feedback` -> `feedback.run_feedback` | store items verbatim with `after_batch` and `decided_at`; nothing is decided here |
 
 ## 3. One example traced end to end
@@ -167,7 +167,7 @@ Others that come up: "show no_finding items too" (drop the `no_finding` filter i
 ## 8. Things to say about limits
 
 - A1 (re-sent invoice counted once in QS) is the least certain call; A2–A20 are in `docs/ASSUMPTIONS.md`.
-- Step budget: ingest stops launching calls at 72% of 300 s; in-flight calls are capped to the time left; the rest
+- Step budget: ingest stops launching calls at 72% of the 240 s budget (about 173 s); in-flight calls are capped to the time left; the rest
   stays pending and the next step (report first) finishes it. Nothing is dropped silently.
 - Confidence weights are hand-set: there were no wrong items to fit, so AUROC is unmeasured.
 - Margin step-down and marginal tiers are extracted but not computed.

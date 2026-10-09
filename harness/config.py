@@ -60,7 +60,7 @@ MAX_TOKENS_EXTRACT = 16000
 THINKING_OFF_MODELS = ("claude-sonnet-5-5",)
 
 # ---- time and concurrency ----------------------------------------------------------------------------------------------
-STEP_BUDGET_S = float(os.environ.get("NOVA_STEP_BUDGET_S", "300"))
+STEP_BUDGET_S = float(os.environ.get("NOVA_STEP_BUDGET_S", "240"))
 INGEST_LAUNCH_FRACTION = 0.72      # ingest stops starting new LLM work after this share of the budget
 REPORT_EXTRACT_FRACTION = 0.60     # report may spend this share of its budget finishing pending documents
 LLM_THREADS = int(os.environ.get("NOVA_LLM_THREADS", "12"))
