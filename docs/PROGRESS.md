@@ -12,3 +12,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: practice make grade 99.9/100 (22/22 hits, 0 false, adaptation 11/11, learning 3/3, actions 24/24 both modes); exam sheet = oracle 9/9
   - Broke / open: AUROC not measurable on practice (every item right); first practice run missed one late-fee risk (parser bug, fixed)
   - API spend so far: $6.55
+
+- **Phase 2: rules and exam gate** (2026-10-09T07:47Z)
+  - Changed: rules polish for cases practice does not exercise: promised-credit due date counted from the anniversary, band/period/month-edge confidence feature on the shipment lane only, unpaid-invoice guard on not-owed fees, native-currency amounts carried for the late-fee-risk principal; tools/check_examples.py in the loop
+  - Score: examples 8/8; practice 99.9/100; exam sheet = oracle 9/9; exam report 55/55 citations resolve
+  - Broke / open: nothing new; confidence still flat (~0.96) so AUROC is not measurable yet (Phase 6)
+  - API spend so far: $6.55

@@ -59,7 +59,7 @@ def evaluate(world: World) -> tuple[list[Outcome], set]:
                         shipments=[(l.awb, world.pickup(l.awb, l.pickup_printed)[1]) for l in later.lines if l.awb],
                         fact_levels=[3], inr=first.currency != "USD")
             o.evidence = [s for s in (row.src, ask_src, later.total_src) if s]
-            o.features.update(scan=later.is_scan, extraction_conf=later.conf)
+            o.features.update(scan=later.is_scan, extraction_conf=later.conf, native_amount=total)
             out.append(o)
             break
     # 2. the same shipment line on two invoice numbers
@@ -106,6 +106,7 @@ def evaluate(world: World) -> tuple[list[Outcome], set]:
             continue
         consumed.update((inv.doc_id, l.idx) for _, l, _ in items)
         o = Outcome("duplicate", "finding", invoice_id=iid, amount_usd=usd, contract=c, fact_levels=[3],
+                    features={"native_amount": amount},
                     shipments=[(l.awb, world.pickup(l.awb, l.pickup_printed)[1]) for _, l, _ in items if l.awb],
                     inr=inv.currency != "USD")
         o.evidence = [s for _, l, (_, fl) in items for s in (fl.src, l.src) if s]

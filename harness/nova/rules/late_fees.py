@@ -78,9 +78,8 @@ def evaluate_not_owed(world: World) -> list[Outcome]:
             due, ext = due_date(world, x, base_due, world.contract_for(xdoc) if xdoc else c)
             if row is None or due is None:
                 continue
-            if row.paid_date is None:
-                if config.ASSUME_SKIP_LATE_FEE_WHEN_UNPAID:
-                    continue
+            if row.paid_date is None:          # A10: no paid date, nothing to count from (and never guess one)
+                continue
             days_late = (row.paid_date - due).days
             principal = row.amount if row.amount is not None else Decimal(str(l.late_fee.get("principal") or 0))
             n = 0 if days_late <= c.grace_days else math.ceil(days_late / 30)

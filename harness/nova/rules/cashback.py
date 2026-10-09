@@ -143,7 +143,12 @@ def _period(world: World, c, term, period: str, start: date, end: date) -> Outco
     owed = earned - credited
     if owed <= 0:
         return None
-    due = end + timedelta(days=int(term.due_days or 0)) if term.due_days is not None else end
+    if term.due_days is None:
+        due = end
+    elif term.basis == "contract_year":                  # "N days after each anniversary of the Effective Date"
+        due = end + timedelta(days=1 + int(term.due_days))
+    else:                                                # "N days after the end of each Quarter"
+        due = end + timedelta(days=int(term.due_days))
     remedy = "claim_credit" if world.as_of >= due else "track_credit"
     o = Outcome("cashback", "finding", contract_id=c.id, period=period, credit_type=term.credit_type,
                 amount_usd=round2(owed), contract=c, remedy=remedy, term_levels=[1], fact_levels=[3])

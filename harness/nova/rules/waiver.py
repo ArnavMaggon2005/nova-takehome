@@ -88,7 +88,7 @@ def evaluate(world: World, skip_lines: set) -> tuple[list[Outcome], set]:
         o = Outcome("waived_but_billed", "finding", invoice_id=iid, amount_usd=usd, contract=c, fact_levels=[3],
                     term_levels=[2], shipments=[(l.awb, world.pickup(l.awb, l.pickup_printed)[1])
                                                 for l in h["lines"].values() if l.awb],
-                    inr=inv.currency != "USD", feedback_used=h["fb"])
+                    inr=inv.currency != "USD", feedback_used=h["fb"], features={"native_amount": amount})
         o.evidence = h["ev"][:1] + [l.src for l in h["lines"].values() if l.src] + h["ev"][1:] + \
             ([c.spans["waiver_authority"]] if "waiver_authority" in c.spans else [])
         o.features.update(scan=inv.is_scan, extraction_conf=inv.conf)

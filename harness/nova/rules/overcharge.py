@@ -8,6 +8,7 @@ cause the hold, peak months). A line whose correct value can't be established is
 """
 from __future__ import annotations
 
+from datetime import timedelta
 from decimal import Decimal
 
 import config
@@ -70,7 +71,7 @@ def _invoice(world: World, inv, c, skip_lines: set) -> Outcome | None:
                 conflict = res
             term_levels += [o.level for o in res.options]
             conflict_keys.append((c.id, l.lane or _lane(lines), "freight", res.period))
-            _boundary(feats, l.qty, res, pickup, c)
+            _boundary(feats, l.qty, l.lane or _lane(lines), pickup, c)
         for l in lines:
             if l.kind == "freight":
                 continue
@@ -134,6 +135,7 @@ def _invoice(world: World, inv, c, skip_lines: set) -> Outcome | None:
     if usd is None:
         return _fx_missing(o, c, inv, line_srcs)
     o.verdict, o.amount_usd = "finding", usd
+    o.features["native_amount"] = total
     rate_srcs = []
     for l, d, res in diffs:
         if res is not None and max(d) > 0:
@@ -230,13 +232,18 @@ def _expected_other(world: World, c, l, lines, pickup, freight_exp, evidence):
     return None
 
 
-def _boundary(feats, qty, res, pickup, c):
-    for opt in res.options:
-        for s in opt.srcs[:1]:
-            _ = s
+def _boundary(feats, qty, lane, pickup, c):
+    """Near a weight-band edge of this lane (within 1 kg) or a rate-period / fuel-month edge (within 1 day): a
+    misread quantity or date would change the answer, so confidence is lowered."""
+    for r in c.rate_rows:
+        if r.lane == lane and r.band != "minimum" and any(e is not None and abs(qty - e) <= 1 for e in (r.lo, r.hi)):
+            feats["boundary"] = True
     for name, st, en, _ in c.periods:
         if abs((pickup - st).days) <= 1 or abs((pickup - en).days) <= 1:
             feats["boundary"] = True
+    month_end = (pickup.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+    if pickup.day == 1 or pickup == month_end:
+        feats["boundary"] = True
 
 
 def _fx_missing(o: Outcome, c, inv, line_srcs) -> Outcome:
