@@ -10,6 +10,36 @@ from __future__ import annotations
 
 import os
 from decimal import Decimal
+from pathlib import Path
+
+
+def _dev_overrides() -> None:
+    """Developer-only settings. grader/run_grader.py strips the environment (only PATH, HOME, TMPDIR, ANTHROPIC_*
+    reach the harness), so during development NOVA_* values can also come from <repo>/.nova_dev.env (gitignored).
+    The file never exists in a grading checkout; real environment variables always win; only NOVA_* keys are read."""
+    f = Path(__file__).resolve().parent.parent / ".nova_dev.env"
+    if not f.is_file():
+        return
+    for line in f.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = (x.strip() for x in line.split("=", 1))
+            if k.startswith("NOVA_"):
+                os.environ.setdefault(k, v)
+
+
+_dev_overrides()
+
+# ---- dev-only switches (unset in grading) ------------------------------------------------------------------------------
+CACHE_DIR = os.environ.get("NOVA_CACHE_DIR") or None          # shared extraction cache across runs, modes, states
+SPEND_LEDGER = os.environ.get("NOVA_SPEND_LEDGER") or None    # cumulative cost ledger
+SPEND_LIMIT_USD = float(os.environ.get("NOVA_SPEND_LIMIT") or 0) or None
+PRICES = {   # USD per million tokens (input, output, cache read); cache writes are 1.25 x input
+    "claude-opus-5-5": {"in": 4.0, "out": 20.0, "read": 0.20},
+    "claude-sonnet-5-5": {"in": 2.0, "out": 10.0, "read": 0.20},
+    "claude-haiku-4-5": {"in": 1.0, "out": 5.0, "read": 0.10},
+    "default": {"in": 5.0, "out": 25.0, "read": 0.50},
+}
 
 # ---- models ----------------------------------------------------------------------------------------------------------
 # Contracts, amendments, annexes, rate notices and Schedule 1 need the strongest reader; everything else is routine.
@@ -19,7 +49,9 @@ EFFORT_CLASSIFY = "low"
 EFFORT_DOC = "low"
 EFFORT_CONTRACT = "medium"
 MAX_TOKENS_CLASSIFY = 4000
-MAX_TOKENS_EXTRACT = 32000
+MAX_TOKENS_EXTRACT = 16000
+# Extraction is copying, not reasoning: on models that allow it, thinking is switched off to save output tokens.
+THINKING_OFF_MODELS = ("claude-sonnet-5-5",)
 
 # ---- time and concurrency ----------------------------------------------------------------------------------------------
 STEP_BUDGET_S = float(os.environ.get("NOVA_STEP_BUDGET_S", "300"))

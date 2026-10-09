@@ -21,7 +21,10 @@ from pathlib import Path
 
 import config
 
+from . import spend
+
 PROMPT_VERSION = "v1"
+_SLOTS = threading.BoundedSemaphore(max(1, config.LLM_THREADS))   # global cap on concurrent API calls
 
 
 class BudgetExceeded(Exception):
@@ -62,7 +65,10 @@ class LLM:
                 import anthropic
                 if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
                     raise BudgetExceeded("no ANTHROPIC_API_KEY in the environment: documents stay pending")
-                self._client = anthropic.Anthropic(max_retries=0, timeout=config.LLM_REQUEST_TIMEOUT_S)
+                # An organisation-level key needs the workspace named on every request.
+                ws = os.environ.get("ANTHROPIC_WORKSPACE_ID") or os.environ.get("NOVA_WORKSPACE_ID")
+                extra = {"default_headers": {"anthropic-workspace-id": ws}} if ws else {}
+                self._client = anthropic.Anthropic(max_retries=0, timeout=config.LLM_REQUEST_TIMEOUT_S, **extra)
             return self._client
 
     # ---- public ----------------------------------------------------------------------------------------------------
@@ -96,19 +102,36 @@ class LLM:
                      else hashlib.sha256(b["source"]["data"].encode()).digest())
         return h.hexdigest()
 
+    def _dirs(self) -> list[Path]:
+        dirs = [self.cache_dir]
+        if config.CACHE_DIR:                       # dev only: share extractions across runs, modes and state dirs
+            d = Path(config.CACHE_DIR).expanduser()
+            d.mkdir(parents=True, exist_ok=True)
+            dirs.append(d)
+        return dirs
+
     def _cache_get(self, key: str):
-        f = self.cache_dir / f"{key}.json"
-        if f.is_file():
-            try:
-                return json.loads(f.read_text())
-            except json.JSONDecodeError:
-                return None
+        for d in self._dirs():
+            f = d / f"{key}.json"
+            if f.is_file():
+                try:
+                    hit = json.loads(f.read_text())
+                except json.JSONDecodeError:
+                    continue
+                if d != self.cache_dir:
+                    self._write(self.cache_dir, key, hit)
+                return hit
         return None
 
     def _cache_put(self, key: str, value: dict) -> None:
-        tmp = self.cache_dir / f"{key}.json.tmp"
+        for d in self._dirs():
+            self._write(d, key, value)
+
+    @staticmethod
+    def _write(d: Path, key: str, value: dict) -> None:
+        tmp = d / f"{key}.json.{threading.get_ident()}.tmp"
         tmp.write_text(json.dumps(value))
-        tmp.replace(self.cache_dir / f"{key}.json")
+        tmp.replace(d / f"{key}.json")
 
     def _call(self, model, system, blocks, schema, effort, max_tokens, cache_doc_block):
         import anthropic
@@ -119,6 +142,8 @@ class LLM:
                       system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
                       messages=[{"role": "user", "content": content}],
                       output_config={"effort": effort, "format": {"type": "json_schema", "schema": schema}})
+        if model in config.THINKING_OFF_MODELS:
+            params["thinking"] = {"type": "between_tools"}
         schema_in_prompt = False
         attempt = 0
         while True:
@@ -126,21 +151,25 @@ class LLM:
             remaining = self.budget.remaining()
             if remaining < 15:
                 raise BudgetExceeded(f"{remaining:.0f}s left")
+            if spend.over_limit():
+                raise BudgetExceeded(f"spend limit reached (${spend.total():.2f}); documents stay pending")
             try:
-                resp = self.client.with_options(timeout=min(config.LLM_REQUEST_TIMEOUT_S, remaining - 5)) \
-                    .messages.create(**params)
+                with _SLOTS:
+                    resp = self.client.with_options(timeout=min(config.LLM_REQUEST_TIMEOUT_S, remaining - 5)) \
+                        .messages.create(**params)
                 with self._lock:
                     self.usage["calls"] += 1
+                u = resp.usage
+                usage = {"input": u.input_tokens, "output": u.output_tokens,
+                         "cache_read": getattr(u, "cache_read_input_tokens", 0) or 0,
+                         "cache_write": getattr(u, "cache_creation_input_tokens", 0) or 0}
+                spend.record(resp.model or model, usage, "llm")
                 if resp.stop_reason == "refusal":
                     raise _Refused()
                 text = "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
                 if resp.stop_reason == "max_tokens":
                     raise LLMError(f"hit max_tokens ({max_tokens})")
                 data = _parse_json(text)
-                u = resp.usage
-                usage = {"input": u.input_tokens, "output": u.output_tokens,
-                         "cache_read": getattr(u, "cache_read_input_tokens", 0) or 0,
-                         "cache_write": getattr(u, "cache_creation_input_tokens", 0) or 0}
                 with self._lock:
                     for k, v in usage.items():
                         self.usage[k] += v
@@ -149,6 +178,9 @@ class LLM:
                 raise
             except anthropic.BadRequestError as e:
                 msg = str(e).lower()
+                if "thinking" in params and "thinking" in msg:
+                    params.pop("thinking")                 # this model/effort doesn't take it: use the default
+                    continue
                 if not schema_in_prompt and ("output_config" in msg or "schema" in msg or "format" in msg):
                     # fall back to JSON-in-prompt for schemas the structured-output compiler won't take
                     schema_in_prompt = True

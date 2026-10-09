@@ -1,10 +1,10 @@
 # Runs on your private copy: the practice grader, then the submission check.
 # Add your key as a repository secret named ANTHROPIC_API_KEY (Settings > Secrets and variables > Actions).
-# Each run spends from that key. Remove the `push` trigger if you'd rather run it by hand only.
+# Each run spends from that key. Manual only (no `push` trigger): this copy has no key secret, so it never runs on its
+# own; see SOLUTION.md.
 name: grade
 
 on:
-  push:
   workflow_dispatch:
 
 permissions:

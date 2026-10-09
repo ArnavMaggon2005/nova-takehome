@@ -6,3 +6,5 @@ __pycache__/
 *.pyc
 local/
 .llm_cache/
+.nova_dev.env
+.nova_cache/
