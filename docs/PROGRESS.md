@@ -54,3 +54,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: practice 99.7/100 (final, Opus contracts); exam sheet = local oracle 9/9, total_savings 8165.33; evals 23/23; 44 unit tests; make validate 9/9 Ready to send
   - Broke / open: nothing; cold (uncached) runs not repeated after the smoke test, by budget decision
   - API spend so far: $9.03
+
+- **Docs: walkthrough, DESIGN trim, planning-chat placeholder** (2026-10-09T08:47Z)
+  - Changed: DESIGN.md trimmed to 793 words (all 8 sections); docs/WALKTHROUGH.md (layout, one example traced .eml -> extraction -> state -> world -> rule -> report item, rule-to-code map, extension guides, five on-the-spot changes); ai_log/claude_ai_planning_chat.md placeholder linked from AI_USE.md; prompt log re-exported
+  - Score: unchanged: practice 99.7, exam sheet = oracle, evals 23/23 (no harness change)
+  - Broke / open: none
+  - API spend so far: $9.03

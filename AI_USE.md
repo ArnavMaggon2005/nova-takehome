@@ -6,6 +6,7 @@
   tests, the eval set and these documents, working in one session.
 - **Claude Opus 5.5 and Claude Sonnet 5.5** are called by the harness itself through the `anthropic` SDK. They only
   read documents into JSON; no decision is made by a model.
+- **Claude on claude.ai** for my planning chat (log linked below).
 
 ## How you worked with them
 
@@ -40,7 +41,9 @@ No code or document text. My part was the direction and every decision listed ab
 
 ## Prompt log
 
-The session is exported in [ai_log/claude_code_session.md](ai_log/claude_code_session.md). It holds every prompt I
-sent, every reply, and one line per tool call. Raw tool output (file and command dumps), the model's internal thinking
+- [ai_log/claude_ai_planning_chat.md](ai_log/claude_ai_planning_chat.md): my planning chat on claude.ai.
+- [ai_log/claude_code_session.md](ai_log/claude_code_session.md): the Claude Code session that did the work.
+
+The Claude Code export holds every prompt I sent, every reply, and one line per tool call. Raw tool output (file and command dumps), the model's internal thinking
 and system messages are left out for length. No secret appeared in the session; the API key was never printed, and
 the export refuses to write anything key-shaped.

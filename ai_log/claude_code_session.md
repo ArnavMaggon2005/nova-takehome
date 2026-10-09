@@ -2012,3 +2012,143 @@ The current key already hashes the model, a prompt-version string and the full r
 
 
 - `Bash`: Export log, validate, commit Phase 8 and push
+
+
+
+- `Write`: C:\Users\arnav\.claude\projects\c--Users-arnav-OneDrive-Desktop-Nova\memory\nova-project-context.md
+
+
+- `Bash`: Update the memory index line
+
+
+**Claude:** Everything is done. All 8 phases are committed and pushed to your private repo; the final commit is **`2d05139`** on branch `nova-harness`. `make validate` passes 9/9 ("Ready to send"), and total API spend is **$9.03** of your $20.
+
+| Check | Result |
+|---|---|
+| Practice `make grade` (final run, Opus for contracts) | **99.7/100**, no hard gate; 22/22 findings right, $0 wrongly disputed; adaptation 11/11, learning 3/3, actions 24/24 in both modes |
+| Exam `make sheet` vs your oracle | **PASS 9/9**, total savings $8,165.33; all 55 citations resolve |
+| Worked examples | 8/8 |
+| Eval set (`make eval`) | **23/23**: 21 of mine across 12 mailboxes in two invented worlds, plus the 2 samples |
+| Unit tests | 44, none of which can call the API |
+| No-hardcoding check | clean |
+
+**Spend ($9.03):**
+
+| Item | Cost |
+|---|---|
+| Worked examples | $2.15 |
+| First full practice + exam pass | $4.40 |
+| Eval mailboxes | $0.96 |
+| Final Opus contract re-extraction (estimated $1.6–2.3) | $1.38 |
+| Grading-mode smoke test | $0.15 |
+
+The smoke test cost was booked by hand, because grading mode deliberately has no ledger.
+
+**Opus vs Sonnet on contract extraction:** about 13 fields differ across 9 documents, and **not one answer changes**. Opus is right in all but one case:
+- **Both amendments:** Sonnet named the missing document "Annex A rev 2 (attached)", Opus "Annex A rev 2". The line is `Annex A rev 2 (attached) applies from …`; "(attached)" describes the document rather than naming it, so Opus is right, and both pass the grader's name match. Sonnet also logged "All other terms … unchanged" as a term change; Opus correctly didn't.
+- **Both India contracts:** for the improvement credit, Opus says the rate applies to all spend, matching `credit equal to 0.83% of the Qualifying Spend of the Contract Year`. That field is unused for a flat rate. The other differences are equivalent wording.
+- **Exam US contract:** the margin step-down basis differs, but the line `8.2 Margin step-down. Not applicable to this Agreement.` makes it inert. Opus's per-quarter basis matches the glossary.
+- **Rate notices:** on practice `0024.eml` Opus found the contract number in `Reference: TBX-US-EXP-01/RN-…` and Sonnet didn't. On exam `0001.eml` it's the reverse, with Sonnet right from `Notice ref. CDA-US-EXP-E91/RN-…`. Neither matters: a notice without a contract number is matched by its sender's exact address in that contract's Schedule 1.
+
+**What you asked for since the checkpoint:**
+- **Final runs:** `make grade` and `make sheet` ran with the real default models while the cache and ledger stayed on, so only contract documents went to Opus; `make eval` ran from cache.
+- **Smoke test:** with `.nova_dev.env` moved aside, a fresh state and the grader's stripped environment, the run produced the expected finding, and no ledger, shared cache or model override was used.
+- **Cache key:** it includes each extraction kind's prompt version, the model and a hash of the full request content. It's checked again on every read, and a test fails if a prompt changes without a version bump.
+- **A1:** the reasoning you gave is in `docs/ASSUMPTIONS.md` and flagged in DESIGN.md as the least-certain call.
+- **The eval set caught a real bug:** a mention of the contract's own "Appendix 1" was being treated as a missing document. The fix and its regression test are written up in SOLUTION.md.
+
+**Before you submit:**
+- **Commit hash:** give GoComet `2d05139`. It's on `nova-harness`; `main` holds only the template plus the manual-only CI change, so merge into `main` first if you want `main` to be the submission. Invite their GitHub account with read access.
+- **AI_USE.md** is written in your first-person voice from this session's record. Please read it before sending, since it speaks for you.
+- **Prompt log:** `ai_log/claude_code_session.md` contains every prompt and reply, including my exam-oracle tables. Those are the same numbers as the committed `answer_sheet.json`, so nothing new is exposed. It has no key: it was checked against the same pattern `make validate` uses.
+- **DESIGN.md** is 856 words, slightly over the "about 800" in the brief.
+
+
+## Prompt 7 (2026-10-09 08:43:18 UTC)
+
+<pasted_content id="6518">
+Great work. Final tasks before I submit:
+
+1. Submission commit: make main point to the submission. If main has commits not in nova-harness (like the CI
+   change), merge them into nova-harness first, then fast-forward main to it. Re-run make validate at that exact
+   commit, push, and give me the final hash. Don't regenerate answer_sheet.json or the report card unless
+   validate requires it.
+2. Trim DESIGN.md to at most 800 words without losing any required section.
+3. Timing: from your existing logs (no new API calls), report the wall-clock time of an uncached ingest of the
+   largest batch with the real defaults, and of report and feedback. Flag anything that might come close to a
+   5-minute per-step limit, and what the step budget does when it's hit.
+4. Write docs/WALKTHROUGH.md for me to study before the interview: the repo layout; one worked example traced from
+   .eml to extraction to fact store to rule to report item, with the file and function at each step; where each
+   glossary rule lives in the code; how to add a new invoice layout or a new feedback type; and 5 likely "change
+   this on the spot" requests with the exact files I'd edit. Commit it.
+5. Create ai_log/claude_ai_planning_chat.md as a placeholder with a heading, link it from AI_USE.md, and tell me
+   when it's ready for me to paste in.
+</pasted_content id="6518">
+
+
+**Claude:** All five, then the final hash at the end. I'll do the content work on `nova-harness` first, then merge `main` in, fast-forward `main`, validate at that exact commit and push.
+
+First the timing data, from existing logs only: the final `make grade` card records per-step seconds, and the dev and smoke-test states have step logs.
+
+
+- `Write`: C:\Users\arnav\AppData\Local\Temp\claude\c--Users-arnav-OneDrive-Desktop-Nova\b290e15b-ef2f-42f6-87a6-f74f4b560165\scratchpad\timing.py
+
+- `Bash`: Gather step timings from existing logs
+
+
+
+- `Read`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\DESIGN.md
+
+- `Write`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\DESIGN.md
+
+- `Bash`: Count DESIGN words and per-section words as validate does
+
+
+
+- `Bash`: List every function definition with line numbers
+
+
+
+- `Write`: C:\Users\arnav\AppData\Local\Temp\claude\c--Users-arnav-OneDrive-Desktop-Nova\b290e15b-ef2f-42f6-87a6-f74f4b560165\scratchpad\trace.py
+
+- `Bash`: Trace the overcharge example through the pipeline
+
+
+**Claude:** I have real values for every step of the trace. Writing `docs/WALKTHROUGH.md` for your interview prep:
+
+
+- `Write`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\docs\WALKTHROUGH.md
+
+
+**Claude:** Now the placeholder for your planning chat, linked from AI_USE.md:
+
+
+- `Write`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\ai_log\claude_ai_planning_chat.md
+
+- `Edit`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+
+**Claude:** That link text guessed at what your planning chat contains, which I don't know. I'll make it neutral:
+
+
+- `Edit`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+- `Bash`: Show the AI_USE prompt-log section
+
+- `Read`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+
+**Claude:** The link works; I'll tidy the repeated sentence and add the claude.ai chat to the Tools list so the two sections agree:
+
+
+- `Edit`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+- `Read`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+- `Edit`: \\wsl.localhost\Ubuntu\home\arnav\nova-takehome\AI_USE.md
+
+
+**Claude:** Now committing on `nova-harness`. The prompt log is regenerated first so it includes this session up to now, and the commit script appends the PROGRESS note.
+
+
+- `Bash`: Re-export log and commit the docs on nova-harness
