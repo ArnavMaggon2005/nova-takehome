@@ -48,3 +48,9 @@ One entry per phase (docs/PLAN.md section 13): what changed, the score, what bro
   - Score: 44/44 unit tests (spend unchanged with the key loaded); practice 99.7; exam sheet unchanged
   - Broke / open: none
   - API spend so far: $7.66
+
+- **Phase 8: final runs, docs, prompt log** (2026-10-09T08:26Z)
+  - Changed: final runs: make grade and make sheet in dev final mode (.nova_dev.env with NOVA_DEV_DEFAULT_MODELS=1: code-default models, Opus for the contract documents only, shared cache + ledger on); make eval from the cache (Sonnet extractions, dev mode); true-grading smoke test earlier with .nova_dev.env moved aside, stripped env, fresh state, one example mailbox. Opus vs Sonnet contract diff: ~13 fields in 9 documents, no answer changed. DESIGN.md, SOLUTION.md, AI_USE.md written; prompt log exported to ai_log/
+  - Score: practice 99.7/100 (final, Opus contracts); exam sheet = local oracle 9/9, total_savings 8165.33; evals 23/23; 44 unit tests; make validate 9/9 Ready to send
+  - Broke / open: nothing; cold (uncached) runs not repeated after the smoke test, by budget decision
+  - API spend so far: $9.03

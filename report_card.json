@@ -448,19 +448,19 @@
       {
        "step": "ingest",
        "rc": 0,
-       "stderr": "ingest batch_01: {'extracted': 82, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 127, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 82}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 0.5
+       "stderr": "ingest batch_01: {'extracted': 82, 'failed': 0, 'pending': 0, 'usage': {'calls': 7, 'cached': 120, 'input': 74639, 'output': 19619, 'cache_read': 0, 'cache_write': 0}, 'added': 82}\nAPI spend so far: $8.3466 (stop at $15.00)\n",
+       "secs": 61.0
       },
       {
        "step": "report",
        "rc": 0,
-       "stderr": "API spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "API spend so far: $8.3466 (stop at $15.00)\n",
        "secs": 0.1
       },
       {
        "step": "feedback",
        "rc": 0,
-       "stderr": "feedback W1_batch_01.json: stored 1 item(s)\nAPI spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "feedback W1_batch_01.json: stored 1 item(s)\nAPI spend so far: $8.3466 (stop at $15.00)\n",
        "secs": 0.0
       }
      ],
@@ -474,13 +474,13 @@
       {
        "step": "ingest",
        "rc": 0,
-       "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 2.9
+       "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 1, 'cached': 125, 'input': 2063, 'output': 617, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $8.3672 (stop at $15.00)\n",
+       "secs": 7.6
       },
       {
        "step": "report",
        "rc": 0,
-       "stderr": "API spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "API spend so far: $8.3672 (stop at $15.00)\n",
        "secs": 0.1
       }
      ],
@@ -498,19 +498,19 @@
       {
        "step": "ingest",
        "rc": 0,
-       "stderr": "ingest batch_01: {'extracted': 82, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 127, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 82}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "ingest batch_01: {'extracted': 82, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 127, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 82}\nAPI spend so far: $8.3672 (stop at $15.00)\n",
        "secs": 0.5
       },
       {
        "step": "report",
        "rc": 0,
-       "stderr": "API spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "API spend so far: $8.3672 (stop at $15.00)\n",
        "secs": 0.1
       },
       {
        "step": "feedback",
        "rc": 0,
-       "stderr": "feedback W1_batch_01.json: stored 1 item(s)\nAPI spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "feedback W1_batch_01.json: stored 1 item(s)\nAPI spend so far: $8.3672 (stop at $15.00)\n",
        "secs": 0.0
       }
      ],
@@ -524,13 +524,13 @@
       {
        "step": "ingest",
        "rc": 0,
-       "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $7.6556 (stop at $15.00)\n",
-       "secs": 2.9
+       "stderr": "ingest batch_02: {'extracted': 81, 'failed': 0, 'pending': 0, 'usage': {'calls': 0, 'cached': 126, 'input': 0, 'output': 0, 'cache_read': 0, 'cache_write': 0}, 'added': 81}\nAPI spend so far: $8.3672 (stop at $15.00)\n",
+       "secs": 2.8
       },
       {
        "step": "report",
        "rc": 0,
-       "stderr": "API spend so far: $7.6556 (stop at $15.00)\n",
+       "stderr": "API spend so far: $8.3672 (stop at $15.00)\n",
        "secs": 0.1
       }
      ],
